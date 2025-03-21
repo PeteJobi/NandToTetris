@@ -11,6 +11,11 @@
     <None Remove="TestData\Add.asm" />
     <None Remove="TestData\Max.asm" />
     <None Remove="TestData\Pong.asm" />
+    <None Remove="TestData\Translator\BasicTest.vm" />
+    <None Remove="TestData\Translator\PointerTest.vm" />
+    <None Remove="TestData\Translator\SimpleAdd.vm" />
+    <None Remove="TestData\Translator\StackTest.vm" />
+    <None Remove="TestData\Translator\StaticTest.vm" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,12 +28,19 @@
     <Content Include="TestData\Assembler\Pong.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestData\Translator\BasicTest.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestData\Max.asm">
+    <Content Include="TestData\Translator\PointerTest.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestData\Pong.asm">
+    <Content Include="TestData\Translator\SimpleAdd.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Translator\StackTest.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Translator\StaticTest.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -42,6 +54,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Project06\Assembler\Assembler.csproj" />
+    <ProjectReference Include="..\Project07And08\VMTranslator\VMTranslator.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests.csproj", "{3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembler", "..\Project06\Assembler\Assembler.csproj", "{72CDFA20-D3C5-4B4B-B073-BD99057F4A41}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VMTranslator", "..\Project07And08\VMTranslator\VMTranslator.csproj", "{7017AA8C-8BB2-4170-B9F3-6B1FC3E1AB91}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{72CDFA20-D3C5-4B4B-B073-BD99057F4A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72CDFA20-D3C5-4B4B-B073-BD99057F4A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72CDFA20-D3C5-4B4B-B073-BD99057F4A41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7017AA8C-8BB2-4170-B9F3-6B1FC3E1AB91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7017AA8C-8BB2-4170-B9F3-6B1FC3E1AB91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7017AA8C-8BB2-4170-B9F3-6B1FC3E1AB91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7017AA8C-8BB2-4170-B9F3-6B1FC3E1AB91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
