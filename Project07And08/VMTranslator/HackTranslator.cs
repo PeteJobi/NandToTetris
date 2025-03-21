@@ -9,7 +9,6 @@
         {
             var commandsWithWhitespace = await File.ReadAllLinesAsync(vmPath);
             var commands = new List<Command>();
-            short variableCount = 0;
 
             //Process whitespace and comments
             var commandLines = commandsWithWhitespace.Where(comm =>
@@ -54,95 +53,78 @@
                 for (var i = 0; i < commands.Count; i++)
                 {
                     var command = commands[i];
-                    string asmCode;
-                    switch (command.Action)
+                    var asmCode = command.Action switch
                     {
-                        case Action.PUSH:
-                            switch (command.Segment)
-                            {
-                                case Segment.CNST:
-                                    asmCode = $"""
-                                               // Push constant {command.Operand}
-                                               @{command.Operand}
-                                               D=A
-                                               @SP
-                                               A=M
-                                               M=D
-                                               @SP
-                                               M=M+1
+                        Action.PUSH => command.Segment switch
+                        {
+                            Segment.CNST => $"""
+                                             // Push constant {command.Operand}
+                                             @{command.Operand}
+                                             D=A
+                                             @SP
+                                             A=M
+                                             M=D
+                                             @SP
+                                             M=M+1
 
-                                               """;
-                                    break;
-                                case Segment.PTR:
-                                    asmCode = $"""
-                                               // Push pointer {command.Operand}
-                                               @{(command.Operand == 0 ? Segment.THIS : Segment.THAT)}
-                                               D=M
-                                               @SP
-                                               A=M
-                                               M=D
-                                               @SP
-                                               M=M+1
+                                             """,
+                            Segment.PTR => $"""
+                                            // Push pointer {command.Operand}
+                                            @{(command.Operand == 0 ? Segment.THIS : Segment.THAT)}
+                                            D=M
+                                            @SP
+                                            A=M
+                                            M=D
+                                            @SP
+                                            M=M+1
 
-                                               """;
-                                    break;
-                                default:
-                                    asmCode = $"""
-                                               // Push {command.SegmentProps?.Name} {command.Operand}
-                                               @{command.SegmentProps?.Address ?? command.Segment.ToString()}
-                                               D={(command.SegmentProps?.Address == null ? "M" : "A")}
-                                               @{command.Operand}
-                                               A=D+A
-                                               D=M
-                                               @SP
-                                               A=M
-                                               M=D
-                                               @SP
-                                               M=M+1
+                                            """,
+                            _ => $"""
+                                  // Push {command.SegmentProps?.Name} {command.Operand}
+                                  @{command.SegmentProps?.Address ?? command.Segment.ToString()}
+                                  D={(command.SegmentProps?.Address == null ? "M" : "A")}
+                                  @{command.Operand}
+                                  A=D+A
+                                  D=M
+                                  @SP
+                                  A=M
+                                  M=D
+                                  @SP
+                                  M=M+1
 
-                                               """;
-                                    break;
-                            }
-                            break;
-                        case Action.POP:
-                            switch (command.Segment)
-                            {
-                                case Segment.CNST:
-                                    throw new InvalidOperationException("You cannot pop to a constant.");
-                                case Segment.PTR:
-                                    asmCode = $"""
-                                               // Pop pointer {command.Operand}
-                                               @SP
-                                               M=M-1
-                                               A=M
-                                               D=M
-                                               @{(command.Operand == 0 ? Segment.THIS : Segment.THAT)}
-                                               M=D
-                                               """;
-                                    break;
-                                default:
-                                    asmCode = $"""
-                                               // Pop {command.SegmentProps?.Name} {command.Operand}
-                                               @{command.SegmentProps?.Address ?? command.Segment.ToString()}
-                                               D={(command.SegmentProps?.Address == null ? "M" : "A")}
-                                               @{command.Operand}
-                                               D=D+A
-                                               @R14
-                                               M=D
-                                               @SP
-                                               M=M-1
-                                               A=M
-                                               D=M
-                                               @R14
-                                               A=M
-                                               M=D
+                                  """
+                        },
+                        Action.POP => command.Segment switch
+                        {
+                            Segment.CNST => throw new InvalidOperationException("You cannot pop to a constant."),
+                            Segment.PTR => $"""
+                                            // Pop pointer {command.Operand}
+                                            @SP
+                                            M=M-1
+                                            A=M
+                                            D=M
+                                            @{(command.Operand == 0 ? Segment.THIS : Segment.THAT)}
+                                            M=D
+                                            """,
+                            _ => $"""
+                                  // Pop {command.SegmentProps?.Name} {command.Operand}
+                                  @{command.SegmentProps?.Address ?? command.Segment.ToString()}
+                                  D={(command.SegmentProps?.Address == null ? "M" : "A")}
+                                  @{command.Operand}
+                                  D=D+A
+                                  @R14
+                                  M=D
+                                  @SP
+                                  M=M-1
+                                  A=M
+                                  D=M
+                                  @R14
+                                  A=M
+                                  M=D
 
-                                               """;
-                                    break;
-                            }
-                            break;
-                        case Action.ADD:
-                            asmCode = """
+                                  """
+                        },
+                        Action.ADD => """
                                       // Add
                                       @SP
                                       M=M-1
@@ -152,10 +134,8 @@
                                       A=M-1
                                       M=D+M
 
-                                      """;
-                            break;
-                        case Action.SUB:
-                            asmCode = """
+                                      """,
+                        Action.SUB => """
                                       // Subtract
                                       @SP
                                       M=M-1
@@ -165,10 +145,8 @@
                                       A=M-1
                                       M=M-D
 
-                                      """;
-                            break;
-                        case Action.AND:
-                            asmCode = """
+                                      """,
+                        Action.AND => """
                                       // And
                                       @SP
                                       M=M-1
@@ -178,117 +156,103 @@
                                       A=M-1
                                       M=D&M
 
-                                      """;
-                            break;
-                        case Action.OR:
-                            asmCode = """
-                                      // Or
+                                      """,
+                        Action.OR => """
+                                     // Or
+                                     @SP
+                                     M=M-1
+                                     A=M
+                                     D=M
+                                     @SP
+                                     A=M-1
+                                     M=D|M
+
+                                     """,
+                        Action.EQ => $"""
+                                      // Equal
                                       @SP
                                       M=M-1
                                       A=M
                                       D=M
                                       @SP
                                       A=M-1
-                                      M=D|M
+                                      D=M-D
+                                      @TRUE_{i}
+                                      D;JEQ
+                                      @SP
+                                      A=M-1
+                                      M=0
+                                      @CONT_{i}
+                                      0;JMP
+                                      (TRUE_{i})
+                                      @SP
+                                      A=M-1
+                                      M=-1
+                                      (CONT_{i})
 
-                                      """;
-                            break;
-                        case Action.EQ:
-                            asmCode = $"""
-                                       // Equal
-                                       @SP
-                                       M=M-1
-                                       A=M
-                                       D=M
-                                       @SP
-                                       A=M-1
-                                       D=M-D
-                                       @TRUE_{i}
-                                       D;JEQ
-                                       @SP
-                                       A=M-1
-                                       M=0
-                                       @CONT_{i}
-                                       0;JMP
-                                       (TRUE_{i})
-                                       @SP
-                                       A=M-1
-                                       M=-1
-                                       (CONT_{i})
+                                      """,
+                        Action.GT => $"""
+                                      // Greater
+                                      @SP
+                                      M=M-1
+                                      A=M
+                                      D=M
+                                      @SP
+                                      A=M-1
+                                      D=M-D
+                                      @TRUE_{i}
+                                      D;JGT
+                                      @SP
+                                      A=M-1
+                                      M=0
+                                      @CONT_{i}
+                                      0;JMP
+                                      (TRUE_{i})
+                                      @SP
+                                      A=M-1
+                                      M=-1
+                                      (CONT_{i})
 
-                                       """;
-                            break;
-                        case Action.GT:
-                            asmCode = $"""
-                                       // Greater
-                                       @SP
-                                       M=M-1
-                                       A=M
-                                       D=M
-                                       @SP
-                                       A=M-1
-                                       D=M-D
-                                       @TRUE_{i}
-                                       D;JGT
-                                       @SP
-                                       A=M-1
-                                       M=0
-                                       @CONT_{i}
-                                       0;JMP
-                                       (TRUE_{i})
-                                       @SP
-                                       A=M-1
-                                       M=-1
-                                       (CONT_{i})
+                                      """,
+                        Action.LT => $"""
+                                      // Less
+                                      @SP
+                                      M=M-1
+                                      A=M
+                                      D=M
+                                      @SP
+                                      A=M-1
+                                      D=M-D
+                                      @TRUE_{i}
+                                      D;JLT
+                                      @SP
+                                      A=M-1
+                                      M=0
+                                      @CONT_{i}
+                                      0;JMP
+                                      (TRUE_{i})
+                                      @SP
+                                      A=M-1
+                                      M=-1
+                                      (CONT_{i})
 
-                                       """;
-                            break;
-                        case Action.LT:
-                            asmCode = $"""
-                                       // Less
-                                       @SP
-                                       M=M-1
-                                       A=M
-                                       D=M
-                                       @SP
-                                       A=M-1
-                                       D=M-D
-                                       @TRUE_{i}
-                                       D;JLT
-                                       @SP
-                                       A=M-1
-                                       M=0
-                                       @CONT_{i}
-                                       0;JMP
-                                       (TRUE_{i})
-                                       @SP
-                                       A=M-1
-                                       M=-1
-                                       (CONT_{i})
-
-                                       """;
-                            break;
-                        case Action.NEG:
-                            asmCode = """
+                                      """,
+                        Action.NEG => """
                                       // Negate
                                       @SP
                                       A=M-1
                                       M=-M
 
-                                      """;
-                            break;
-                        case Action.NOT:
-                            asmCode = """
+                                      """,
+                        Action.NOT => """
                                       // Not
                                       @SP
                                       A=M-1
                                       M=!M
 
-                                      """;
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                                      """,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
 
                     await streamWriter.WriteLineAsync(asmCode);
                 }
