@@ -7,11 +7,12 @@ namespace Tests
         [Fact]
         public async Task AssemblerTests()
         {
-            var result = await new HackAssembler().Assemble(@"TestData\Add.asm");
+            var assembler = new HackAssembler();
+            var result = await assembler.Assemble(@"TestData\Assembler\Add.asm");
             Assert.True(result.IsSuccessful);
-            result = await new HackAssembler().Assemble(@"TestData\Max.asm");
+            result = await assembler.Assemble(@"TestData\Assembler\Max.asm");
             Assert.True(result.IsSuccessful);
-            result = await new HackAssembler().Assemble(@"TestData\Pong.asm");
+            result = await assembler.Assemble(@"TestData\Assembler\Pong.asm");
             Assert.True(result.IsSuccessful);
         }
     }

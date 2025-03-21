@@ -14,7 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="TestData\Add.asm">
+    <Content Include="TestData\Assembler\Add.asm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Assembler\Max.asm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Assembler\Pong.asm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\Max.asm">
