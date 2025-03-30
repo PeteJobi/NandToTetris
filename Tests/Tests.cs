@@ -26,6 +26,12 @@ namespace Tests
             await translator.Translate(@"TestData\Translator\BasicTest.vm");
             await translator.Translate(@"TestData\Translator\PointerTest.vm");
             await translator.Translate(@"TestData\Translator\StaticTest.vm");
+            await translator.Translate(@"TestData\Translator\BasicLoop.vm");
+            await translator.Translate(@"TestData\Translator\FibonacciSeries.vm");
+            await translator.Translate(@"TestData\Translator\SimpleFunction.vm");
+            await translator.Translate(@"TestData\Translator\NestedCall");
+            await translator.Translate(@"TestData\Translator\FibonacciElement");
+            await translator.Translate(@"TestData\Translator\StaticsTest");
         }
     }
 }

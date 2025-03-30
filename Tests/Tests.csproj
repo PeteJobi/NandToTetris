@@ -11,10 +11,19 @@
     <None Remove="TestData\Add.asm" />
     <None Remove="TestData\Max.asm" />
     <None Remove="TestData\Pong.asm" />
+    <None Remove="TestData\Translator\BasicLoop.vm" />
     <None Remove="TestData\Translator\BasicTest.vm" />
+    <None Remove="TestData\Translator\FibonacciElement\Main.vm" />
+    <None Remove="TestData\Translator\FibonacciElement\Sys.vm" />
+    <None Remove="TestData\Translator\FibonacciSeries.vm" />
+    <None Remove="TestData\Translator\NestedCall\Sys.vm" />
     <None Remove="TestData\Translator\PointerTest.vm" />
     <None Remove="TestData\Translator\SimpleAdd.vm" />
+    <None Remove="TestData\Translator\SimpleFunction.vm" />
     <None Remove="TestData\Translator\StackTest.vm" />
+    <None Remove="TestData\Translator\StaticsTest\Class1.vm" />
+    <None Remove="TestData\Translator\StaticsTest\Class2.vm" />
+    <None Remove="TestData\Translator\StaticsTest\Sys.vm" />
     <None Remove="TestData\Translator\StaticTest.vm" />
   </ItemGroup>
 
@@ -28,7 +37,22 @@
     <Content Include="TestData\Assembler\Pong.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestData\Translator\BasicLoop.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\Translator\BasicTest.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Translator\FibonacciElement\Main.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Translator\FibonacciElement\Sys.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Translator\FibonacciSeries.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Translator\NestedCall\Sys.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\Translator\PointerTest.vm">
@@ -37,7 +61,19 @@
     <Content Include="TestData\Translator\SimpleAdd.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestData\Translator\SimpleFunction.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\Translator\StackTest.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Translator\StaticsTest\Class1.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Translator\StaticsTest\Class2.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Translator\StaticsTest\Sys.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\Translator\StaticTest.vm">
