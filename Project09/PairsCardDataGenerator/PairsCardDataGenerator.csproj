@@ -1,0 +1,88 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="CardsBinaryData\Back.txt" />
+    <None Remove="CardsBinaryData\Ball.txt" />
+    <None Remove="CardsBinaryData\Black.txt" />
+    <None Remove="CardsBinaryData\Book.txt" />
+    <None Remove="CardsBinaryData\Chest.txt" />
+    <None Remove="CardsBinaryData\Coins.txt" />
+    <None Remove="CardsBinaryData\Flame.txt" />
+    <None Remove="CardsBinaryData\Flower.txt" />
+    <None Remove="CardsBinaryData\Ghost.txt" />
+    <None Remove="CardsBinaryData\Knight.txt" />
+    <None Remove="CardsBinaryData\Night.txt" />
+    <None Remove="CardsBinaryData\Panda.txt" />
+    <None Remove="CardsBinaryData\Potion.txt" />
+    <None Remove="CardsBinaryData\Skull.txt" />
+    <None Remove="CardsBinaryData\Smiley.txt" />
+    <None Remove="CardsBinaryData\Strawberry.txt" />
+    <None Remove="CardsBinaryData\SwordAndShield.txt" />
+    <None Remove="CardsBinaryData\Wizard.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="CardsBinaryData\Back.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Ball.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Black.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Book.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Chest.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Coins.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Flame.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Flower.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Ghost.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Knight.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Night.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Panda.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Potion.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Skull.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Smiley.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Strawberry.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\SwordAndShield.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CardsBinaryData\Wizard.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

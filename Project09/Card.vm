@@ -1,0 +1,84 @@
+function Card.new 0
+    push constant 6
+    call Memory.alloc 1
+    pop pointer 0
+    push argument 0
+    pop this 3
+    push pointer 0
+    return
+function Card.getRow 0
+    push argument 0
+    pop pointer 0
+    push this 0
+    return
+function Card.setRow 0
+    push argument 0
+    pop pointer 0
+    push argument 1
+    pop this 0
+    push constant 0
+    return
+function Card.getColumn 0
+    push argument 0
+    pop pointer 0
+    push this 1
+    return
+function Card.setColumn 0
+    push argument 0
+    pop pointer 0
+    push argument 1
+    pop this 1
+    push constant 0
+    return
+function Card.getAddress 0
+    push argument 0
+    pop pointer 0
+    push this 2
+    return
+function Card.setAddress 0
+    push argument 0
+    pop pointer 0
+    push argument 1
+    pop this 2
+    push constant 0
+    return
+function Card.getData 0
+    push argument 0
+    pop pointer 0
+    push this 3
+    return
+function Card.getIsFlipped 0
+    push argument 0
+    pop pointer 0
+    push this 4
+    return
+function Card.setIsFlipped 0
+    push argument 0
+    pop pointer 0
+    push argument 1
+    pop this 4
+    push constant 0
+    return
+function Card.getIsClosed 0
+    push argument 0
+    pop pointer 0
+    push this 5
+    return
+function Card.setIsClosed 0
+    push argument 0
+    pop pointer 0
+    push argument 1
+    pop this 5
+    push constant 0
+    return
+function Card.dispose 0
+    push argument 0
+    pop pointer 0
+    push this 3
+    call Array.dispose 1
+    pop temp 0
+    push pointer 0
+    call Memory.deAlloc 1
+    pop temp 0
+    push constant 0
+    return

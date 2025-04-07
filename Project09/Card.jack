@@ -1,0 +1,30 @@
+class Card{
+	field int row, column;
+	field int address;
+	field Array data;
+	field boolean isFlipped;
+	field boolean isClosed;
+
+	constructor Card new(Array ddata){
+		let data = ddata;
+		return this;
+	}
+
+	method int getRow(){ return row; }
+	method void setRow(int r){ let row = r; return; }
+	method int getColumn(){ return column; }
+	method void setColumn(int c){ let column = c; return; }
+	method int getAddress(){ return address; }
+	method void setAddress(int addr){ let address = addr; return; }
+	method Array getData(){ return data; }
+	method boolean getIsFlipped(){ return isFlipped; }
+	method void setIsFlipped(boolean flipped){ let isFlipped = flipped; return; }
+	method boolean getIsClosed(){ return isClosed; }
+	method void setIsClosed(boolean closed){ let isClosed = closed; return; }
+
+	method void dispose(){
+		do data.dispose();
+		do Memory.deAlloc(this);
+		return;
+	}
+}

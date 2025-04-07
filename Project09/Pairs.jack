@@ -1,0 +1,441 @@
+class Pairs{
+	field int gap;
+	field int cardHeight;
+	field Card selectedCard;
+	field Card flippedCard;
+	field Array flipAnimTopBottomData, flipAnimSidesData, backCardData;
+	field Array cards;
+
+	constructor Pairs new(){
+		var int i;
+		var Card temp;
+		let gap = 8;
+		let cardHeight = 54;
+		let flipAnimTopBottomData = CardsData.getFlipAnimationTopBottomData();
+		let flipAnimSidesData = CardsData.getFlipAnimationSidesData();
+		let backCardData = CardsData.getBackCard();
+		let cards = Array.new(32);
+
+		let cards[0] = Card.new(CardsData.getGhostCard());
+		let cards[1] = Card.new(CardsData.getChestCard());
+		let cards[2] = Card.new(CardsData.getSkullCard());
+		let cards[3] = Card.new(CardsData.getSwordAndShieldCard());
+		let cards[4] = Card.new(CardsData.getPandaCard());
+		let cards[5] = Card.new(CardsData.getFlameCard());
+		let cards[6] = Card.new(CardsData.getBookCard());
+		let cards[7] = Card.new(CardsData.getStrawberryCard());
+		let cards[8] = Card.new(CardsData.getKnightCard());
+		let cards[9] = Card.new(CardsData.getPotionCard());
+		let cards[10] = Card.new(CardsData.getCoinsCard());
+		let cards[11] = Card.new(CardsData.getSmileyCard());
+		let cards[12] = Card.new(CardsData.getNightCard());
+		let cards[13] = Card.new(CardsData.getWizardCard());
+		let cards[14] = Card.new(CardsData.getBallCard());
+		let cards[15] = Card.new(CardsData.getFlowerCard());
+
+		let temp = cards[3];
+		let cards[16] = Card.new(temp.getData());
+		let temp = cards[8];
+		let cards[17] = Card.new(temp.getData());
+		let temp = cards[14];
+		let cards[18] = Card.new(temp.getData());
+		let temp = cards[10];
+		let cards[19] = Card.new(temp.getData());
+		let temp = cards[11];
+		let cards[20] = Card.new(temp.getData());
+		let temp = cards[13];
+		let cards[21] = Card.new(temp.getData());
+		let temp = cards[15];
+		let cards[22] = Card.new(temp.getData());
+		let temp = cards[4];
+		let cards[23] = Card.new(temp.getData());
+		let temp = cards[1];
+		let cards[24] = Card.new(temp.getData());
+		let temp = cards[6];
+		let cards[25] = Card.new(temp.getData());
+		let temp = cards[2];
+		let cards[26] = Card.new(temp.getData());
+		let temp = cards[12];
+		let cards[27] = Card.new(temp.getData());
+		let temp = cards[7];
+		let cards[28] = Card.new(temp.getData());
+		let temp = cards[0];
+		let cards[29] = Card.new(temp.getData());
+		let temp = cards[5];
+		let cards[30] = Card.new(temp.getData());
+		let temp = cards[9];
+		let cards[31] = Card.new(temp.getData());
+		return this;
+	}
+
+	method void PrintAllCards(){
+		var int screen, row, i, j, k, borderTop, borderTop2, borderBottom, borderBottom2;
+		var Card temp;
+		let screen = 16384;
+		while(i < 4){
+			let row = row + gap;
+			let borderTop = row;
+			let borderTop2 = row + 1;
+			let borderBottom = borderTop + cardHeight - 2;
+			let borderBottom2 = borderTop2 + cardHeight - 2;
+			let j = 0;
+			while(j < (4 * cardHeight)){
+				let k = 0;
+				while(k < 8){
+					if((row = borderTop) | (row = borderTop2) | (row = borderBottom) | (row = borderBottom2)){
+						if(row = borderTop){
+							let temp = cards[i * 8 + k];
+							do temp.setRow(i);
+							do temp.setColumn(k);
+							do temp.setAddress(screen + (row * 32) + (k * 4));
+						}
+						do Memory.poke(screen + (row * 32) + (k * 4), -256);
+						do Memory.poke(screen + (row * 32) + (k * 4) + 1, -1);
+						do Memory.poke(screen + (row * 32) + (k * 4) + 2, -1);
+						do Memory.poke(screen + (row * 32) + (k * 4) + 3, 255);
+					}else{
+						do Memory.poke(screen + (row * 32) + (k * 4), backCardData[j] | 768);
+						do Memory.poke(screen + (row * 32) + (k * 4) + 1, backCardData[j + 1]);
+						do Memory.poke(screen + (row * 32) + (k * 4) + 2, backCardData[j + 2]);
+						do Memory.poke(screen + (row * 32) + (k * 4) + 3, backCardData[j + 3] | 192);
+					}
+					let k = k + 1;
+				}
+				let row = row + 1;
+				let j = j + 4;
+			}
+			let i = i + 1;
+		}
+		do Select(cards[0]);
+		return;
+	}
+
+	method void Select(Card newSelection){
+		var int address, currentValue, i, j;
+		if(~(selectedCard = 0)) { do Deselect(); }
+		let address = newSelection.getAddress();
+		let selectedCard = newSelection;
+
+		while(i < 3){
+			do Memory.poke(address - (32 * (2 + i)), -16);
+			do Memory.poke(address - (32 * (2 + i)) + 1, -1);
+			do Memory.poke(address - (32 * (2 + i)) + 2, -1);
+			do Memory.poke(address - (32 * (2 + i)) + 3, 4095);
+			do Memory.poke(address + (32 * (1 + i + cardHeight)), -16);
+			do Memory.poke(address + (32 * (1 + i + cardHeight)) + 1, -1);
+			do Memory.poke(address + (32 * (1 + i + cardHeight)) + 2, -1);
+			do Memory.poke(address + (32 * (1 + i + cardHeight)) + 3, 4095);
+			let i = i + 1;
+		}
+
+		let address = address - 32;
+		let i = 0;
+		while(i < (cardHeight + 2)){
+			let currentValue = Memory.peek(address);
+			do Memory.poke(address, currentValue | 112);
+			let currentValue = Memory.peek(address + 3);
+			do Memory.poke(address + 3, currentValue | 3584);
+			let address = address + 32;
+			let i = i + 1;
+		}
+		return;
+	}
+
+	method void Deselect(){
+		var int address, currentValue, i, j;
+		let address = selectedCard.getAddress();
+
+		while(i < 3){
+			do Memory.poke(address - (32 * (2 + i)), 0);
+			do Memory.poke(address - (32 * (2 + i)) + 1, 0);
+			do Memory.poke(address - (32 * (2 + i)) + 2, 0);
+			do Memory.poke(address - (32 * (2 + i)) + 3, 0);
+			do Memory.poke(address + (32 * (1 + i + cardHeight)), 0);
+			do Memory.poke(address + (32 * (1 + i + cardHeight)) + 1, 0);
+			do Memory.poke(address + (32 * (1 + i + cardHeight)) + 2, 0);
+			do Memory.poke(address + (32 * (1 + i + cardHeight)) + 3, 0);
+			let i = i + 1;
+		}
+
+		let address = address - 32;
+		let i = 0;
+		while(i < (cardHeight + 2)){
+			let currentValue = Memory.peek(address);
+			do Memory.poke(address, currentValue & -113);
+			let currentValue = Memory.peek(address + 3);
+			do Memory.poke(address + 3, currentValue & -3585);
+			let address = address + 32;
+			let i = i + 1;
+		}
+		return;
+	}
+
+	method void Action(){
+		var Array cardsToFlip, cardsToFlipOrClose;
+		var int cardsToFlipLength, cardsToFlipOrCloseLength;
+		var boolean twoFlipped;
+		if(selectedCard = 0) { return; }
+
+		let cardsToFlip = Array.new(1);
+		let cardsToFlip[0] = selectedCard;
+		let cardsToFlipLength = 1;
+		if(flippedCard = 0){ let flippedCard = selectedCard; }
+		else { 
+			if(flippedCard = selectedCard){ let flippedCard = 0; }
+			else { let twoFlipped = true; }
+		}
+
+		do Flip(cardsToFlip, cardsToFlipLength);
+		do selectedCard.setIsFlipped(~selectedCard.getIsFlipped());
+		
+		if(twoFlipped){
+			let cardsToFlipOrClose = Array.new(2);
+			let cardsToFlipOrClose[0] = selectedCard;
+			let cardsToFlipOrClose[1] = flippedCard;
+			let cardsToFlipOrCloseLength = 2;
+			if(selectedCard.getData() = flippedCard.getData()){
+				do selectedCard.setIsClosed(true);
+				do flippedCard.setIsClosed(true);
+				do MoveRight();
+				do Close(cardsToFlipOrClose, cardsToFlipOrCloseLength);
+				if(selectedCard = 0) { do GameOver(); }
+			}else{
+				do Flip(cardsToFlipOrClose, cardsToFlipOrCloseLength);
+				do selectedCard.setIsFlipped(false);
+				do flippedCard.setIsFlipped(false);
+			}
+			
+			let flippedCard = 0;
+		}
+
+		return;
+	}
+
+	method void Flip(Array cardsToFlip, int cardsToFlipLength){
+		var int i, j, n, a, b;
+		var int temp, cardIndex;
+		var int currentValue;
+		var int cardAddr;
+		var int cardData;
+		var Card cardTemp;
+		var Array l, r;
+		let b = 3;
+
+		let l = Array.new(cardsToFlipLength);
+		let r = Array.new(cardsToFlipLength);
+		while(i < cardsToFlipLength){
+			let cardTemp = cardsToFlip[i];
+			if(cardTemp = selectedCard){
+				let l[i] = 112;
+				let r[i] = 3584;
+			}
+			let i = i + 1;
+		}
+		
+		let i = 1;
+		while(i < flipAnimTopBottomData[0]){
+			let n = 0;
+			while(n < cardsToFlipLength){
+				let cardTemp = cardsToFlip[n];
+				let cardAddr = cardTemp.getAddress();
+				do Memory.poke(cardAddr + a, flipAnimTopBottomData[i] | l[n]);
+				do Memory.poke(cardAddr + b, flipAnimTopBottomData[i + 1] | r[n]);
+				do Memory.poke(cardAddr + 32 + a, flipAnimTopBottomData[i] | l[n]);
+				do Memory.poke(cardAddr + 32 + b, flipAnimTopBottomData[i + 1] | r[n]);
+				let j = 2;
+				while(j < (cardHeight - 2)){
+					let temp = cardAddr + (32 * j) + a;
+					let currentValue = Memory.peek(temp);
+					do Memory.poke(temp, (currentValue & (flipAnimTopBottomData[i] | l[n])) | flipAnimSidesData[i]);
+					let temp = cardAddr + (32 * j) + b;
+					let currentValue = Memory.peek(temp);
+					do Memory.poke(temp, (currentValue & (flipAnimTopBottomData[i + 1] | r[n])) | flipAnimSidesData[i + 1]);
+					let j = j + 1;
+				}
+				do Memory.poke(cardAddr + (32 * (cardHeight - 2)) + a, flipAnimTopBottomData[i] | l[n]);
+				do Memory.poke(cardAddr + (32 * (cardHeight - 2)) + b, flipAnimTopBottomData[i + 1] | r[n]);
+				do Memory.poke(cardAddr + (32 * (cardHeight - 1)) + a, flipAnimTopBottomData[i] | l[n]);
+				do Memory.poke(cardAddr + (32 * (cardHeight - 1)) + b, flipAnimTopBottomData[i + 1] | r[n]);
+				let n = n + 1;
+			}
+			if(flipAnimTopBottomData[i] = 0){
+				let a = a + 1;
+				let b = b - 1;
+				let n = 0;
+				while(n < cardsToFlipLength){
+					let l[n] = 0;
+					let r[n] = 0;
+					let n = n + 1;
+				}
+			}else{ do Sys.wait(2); }
+			let i = i + 2;
+		}
+
+		let a = 1;
+		let b = 2;
+		let i = flipAnimTopBottomData[0] - 3;
+		while(i > 0){
+			if(flipAnimTopBottomData[i] = 0){
+				let flipAnimTopBottomData[i] = -1;
+				let flipAnimTopBottomData[i + 1] = -1;
+			}
+			let n = 0;
+			while(n < cardsToFlipLength){
+				let cardTemp = cardsToFlip[n];
+				let cardAddr = cardTemp.getAddress();
+				if(cardTemp.getIsFlipped()){ let cardData = backCardData; }
+				else { let cardData = cardTemp.getData(); }
+				do Memory.poke(cardAddr + a, flipAnimTopBottomData[i] | l[n]);
+				do Memory.poke(cardAddr + b, flipAnimTopBottomData[i + 1] | r[n]);
+				do Memory.poke(cardAddr + 32 + a, flipAnimTopBottomData[i] | l[n]);
+				do Memory.poke(cardAddr + 32 + b, flipAnimTopBottomData[i + 1] | r[n]);
+				let j = 2;
+				while(j < (cardHeight - 2)){
+					do Memory.poke(cardAddr + (32 * j) + a, (cardData[j * 4 + a] & flipAnimTopBottomData[i]) | l[n] | flipAnimSidesData[i]);
+					do Memory.poke(cardAddr + (32 * j) + b, (cardData[j * 4 + b] & flipAnimTopBottomData[i + 1]) | r[n] | flipAnimSidesData[i + 1]);
+					let j = j + 1;
+				}
+				do Memory.poke(cardAddr + (32 * (cardHeight - 2)) + a, flipAnimTopBottomData[i] | l[n]);
+				do Memory.poke(cardAddr + (32 * (cardHeight - 2)) + b, flipAnimTopBottomData[i + 1] | r[n]);
+				do Memory.poke(cardAddr + (32 * (cardHeight - 1)) + a, flipAnimTopBottomData[i] | l[n]);
+				do Memory.poke(cardAddr + (32 * (cardHeight - 1)) + b, flipAnimTopBottomData[i + 1] | r[n]);
+				let n = n + 1;
+			}
+			if(flipAnimTopBottomData[i] = -1){
+				let a = a - 1;
+				let b = b + 1;
+				let n = 0;
+				while(n < cardsToFlipLength){
+					let cardTemp = cardsToFlip[n];
+					if(cardTemp = selectedCard){
+						let l[n] = 112;
+						let r[n] = 3584;
+					}
+					let n = n + 1;
+				}
+				let flipAnimTopBottomData[i] = 0;
+				let flipAnimTopBottomData[i + 1] = 0;
+			}else{ do Sys.wait(2); }
+			let i = i - 2;
+		}
+		return;
+	}
+
+	method void Close(Array cardsToClose, int cardsToCloseLength){
+		var int i, j, k, cardAddr;
+		var Card temp;
+
+		let i = 0;
+		while (i < cardHeight){
+			let j = 0;
+			while(j < cardsToCloseLength){
+				let temp = cardsToClose[j];
+				let cardAddr = temp.getAddress();
+				let k = 0;
+				while(k < 4){
+					do Memory.poke(cardAddr + (i * 32) + k, 0);
+					do Memory.poke(cardAddr + ((i + 1) * 32) + k, 0);
+					let k = k + 1;
+				}
+				let j = j + 1;
+			}
+			do Sys.wait(2);
+			let i = i + 2;
+		}
+		
+		return;
+	}
+
+	method void GameOver(){
+		do Output.moveCursor(10, 27);
+		do Output.printString("Well Done!");
+		do Output.moveCursor(12, 21);
+		do Output.printString("Press (r) to retry....");
+		return;
+	}
+
+	method void MoveUp(){
+		do Move(true, true);
+		return;
+	}
+
+	method void MoveDown(){
+		do Move(true, false);
+		return;
+	}
+
+	method void MoveLeft(){
+		do Move(false, true);
+		return;
+	}
+
+	method void MoveRight(){
+		do Move(false, false);
+		return;
+	}
+
+	method void Move(boolean vertical, boolean backward){
+		var int selectedRow, selectedColumn, i, ind, move;
+		var Card temp, selection;
+		if(selectedCard = 0) { return; }
+
+		let selectedRow = selectedCard.getRow();
+		let selectedColumn = selectedCard.getColumn();
+		if(backward){ let move = -1; }
+		else { let move = 1; }
+
+		let i = 0;
+		while((i < 7) & (selection = 0)){
+			if(vertical){
+				let selectedRow = selectedRow + move;
+				if(selectedRow > 3) { let selectedRow = 0; }
+				else{ if(selectedRow < 0) { let selectedRow = 3; } }
+			}else{
+				let selectedColumn = selectedColumn + move;
+				if(selectedColumn > 7) { let selectedColumn = 0; }
+				else{ if(selectedColumn < 0) { let selectedColumn = 7; } }
+			}
+			let temp = cards[selectedRow * 8 + selectedColumn];
+			if(~temp.getIsClosed() & ~(selectedCard = temp)){ let selection = temp; }
+			let i = i + 1;
+		}
+		if(~(selection = 0)){
+			do Select(selection);
+			return;
+		}
+
+		let ind = selectedCard.getRow() * 8 + selectedCard.getColumn();
+		let i = 0;
+		while((i < 31) & (selection = 0)){
+			let ind = ind + move;
+			if(ind > 31) { let ind = 0; }
+			else{ if(ind < 0) { let ind = 31; } }
+			let temp = cards[ind];
+			if(~temp.getIsClosed() & ~(selectedCard = temp)){ let selection = temp; }
+			let i = i + 1;
+		}
+		if(~(selection = 0)){
+			do Select(selection);
+			return;
+		}
+		
+		do Deselect();
+		let selectedCard = 0;
+		return;
+	}
+
+	method void dispose(){
+		var int i;
+		var Card temp;
+		do flipAnimTopBottomData.dispose();
+		do flipAnimSidesData.dispose();
+		do backCardData.dispose();
+		while(i < 32){
+			let temp = cards[i];
+			do temp.dispose();
+			let i = i + 1;
+		}
+		do Memory.deAlloc(this);
+		return;
+	}
+}

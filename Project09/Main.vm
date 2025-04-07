@@ -1,0 +1,128 @@
+function Main.main 4
+label Main_0
+    push local 2
+    push constant 0
+    eq
+    not
+    if-goto Main_1
+    push constant 0
+    pop local 1
+    call Pairs.new 0
+    pop local 0
+    push local 0
+    call Pairs.PrintAllCards 1
+    pop temp 0
+label Main_2
+    push local 1
+    push constant 0
+    eq
+    push local 2
+    push constant 0
+    eq
+    and
+    not
+    if-goto Main_3
+    call Keyboard.keyPressed 0
+    pop local 3
+    push local 3
+    push constant 130
+    eq
+    not
+    if-goto Main_5
+    push local 0
+    call Pairs.MoveLeft 1
+    pop temp 0
+    goto Main_4
+label Main_5
+label Main_4
+    push local 3
+    push constant 131
+    eq
+    not
+    if-goto Main_7
+    push local 0
+    call Pairs.MoveUp 1
+    pop temp 0
+    goto Main_6
+label Main_7
+label Main_6
+    push local 3
+    push constant 132
+    eq
+    not
+    if-goto Main_9
+    push local 0
+    call Pairs.MoveRight 1
+    pop temp 0
+    goto Main_8
+label Main_9
+label Main_8
+    push local 3
+    push constant 133
+    eq
+    not
+    if-goto Main_11
+    push local 0
+    call Pairs.MoveDown 1
+    pop temp 0
+    goto Main_10
+label Main_11
+label Main_10
+    push local 3
+    push constant 128
+    eq
+    push local 3
+    push constant 32
+    eq
+    or
+    not
+    if-goto Main_13
+    push local 0
+    call Pairs.Action 1
+    pop temp 0
+    goto Main_12
+label Main_13
+label Main_12
+    push local 3
+    push constant 114
+    eq
+    not
+    if-goto Main_15
+    push constant 1
+    pop local 1
+    goto Main_14
+label Main_15
+label Main_14
+    push local 3
+    push constant 113
+    eq
+    not
+    if-goto Main_17
+    push constant 1
+    pop local 2
+    goto Main_16
+label Main_17
+label Main_16
+    push local 3
+    push constant 0
+    eq
+    not
+    not
+    if-goto Main_19
+    push constant 100
+    call Sys.wait 1
+    pop temp 0
+    goto Main_18
+label Main_19
+label Main_18
+    goto Main_2
+label Main_3
+    push local 0
+    call Pairs.dispose 1
+    pop temp 0
+    call Screen.clearScreen 0
+    pop temp 0
+    goto Main_0
+label Main_1
+    push constant 0
+    return

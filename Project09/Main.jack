@@ -1,0 +1,28 @@
+class Main{
+	function void main(){
+		var Pairs pairs;
+		var int retry, exit, keyPressed;
+		
+		while(exit = 0){
+			let retry = 0;
+			let pairs = Pairs.new();
+			do pairs.PrintAllCards();
+
+			while((retry = 0) & (exit = 0)){
+				let keyPressed = Keyboard.keyPressed();
+				if(keyPressed = 130){ do pairs.MoveLeft(); } //Left arrow
+				if(keyPressed = 131){ do pairs.MoveUp(); }
+				if(keyPressed = 132){ do pairs.MoveRight(); }
+				if(keyPressed = 133){ do pairs.MoveDown(); }
+				if((keyPressed = 128) | (keyPressed = 32)){ do pairs.Action(); } //Enter or Space
+				if(keyPressed = 114){ let retry = 1; } //r
+				if(keyPressed = 113){ let exit = 1; } //q
+				if(~(keyPressed = 0)) { do Sys.wait(100); }
+			}
+
+			do pairs.dispose();
+			do Screen.clearScreen();
+		}
+		return;
+	}
+}
