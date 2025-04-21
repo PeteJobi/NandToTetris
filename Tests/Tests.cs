@@ -1,5 +1,7 @@
 ﻿using Assembler;
+using Compiler;
 using VMTranslator;
+using static System.IO.Path;
 
 namespace Tests
 {
@@ -32,6 +34,38 @@ namespace Tests
             await translator.Translate(@"TestData\Translator\NestedCall");
             await translator.Translate(@"TestData\Translator\FibonacciElement");
             await translator.Translate(@"TestData\Translator\StaticsTest");
+        }
+
+        [Fact]
+        public async Task AnalyzerTests()
+        {
+            var compiler = new JackCompiler();
+
+            await compiler.Compile(@"TestData\Analyzer\ArrayTest");
+            await CompareFiles(@"TestData\Analyzer\ArrayTest\Main.jack");
+
+            await compiler.Compile(@"TestData\Analyzer\Square");
+            await CompareFiles(@"TestData\Analyzer\Square\Main.jack");
+            await CompareFiles(@"TestData\Analyzer\Square\Square.jack");
+            await CompareFiles(@"TestData\Analyzer\Square\SquareGame.jack");
+            return;
+
+            async Task CompareFiles(string jackPath)
+            {
+                var parentFolder = GetDirectoryName(jackPath)!;
+                var outputFileName = GetFileNameWithoutExtension(jackPath);
+                var tokenizerExpectedFile = Join(parentFolder, outputFileName) + "TExpected.xml";
+                var analyzerExpectedFile = Join(parentFolder, outputFileName) + "Expected.xml";
+                var tokenizerOutputFile = Join(parentFolder, outputFileName) + "T.xml";
+                var analyzerOutputFile = Join(parentFolder, outputFileName) + ".xml";
+
+                var expected = await File.ReadAllTextAsync(tokenizerExpectedFile);
+                var actual = await File.ReadAllTextAsync(tokenizerOutputFile);
+                Assert.Equal(expected, actual);
+                expected = await File.ReadAllTextAsync(analyzerExpectedFile);
+                actual = await File.ReadAllTextAsync(analyzerOutputFile);
+                Assert.Equal(expected, actual);
+            }
         }
     }
 }

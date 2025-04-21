@@ -9,6 +9,18 @@
 
   <ItemGroup>
     <None Remove="TestData\Add.asm" />
+    <None Remove="TestData\Analyzer\ArrayTest\Main.jack" />
+    <None Remove="TestData\Analyzer\ArrayTest\MainExpected.xml" />
+    <None Remove="TestData\Analyzer\ArrayTest\MainTExpected.xml" />
+    <None Remove="TestData\Analyzer\Square\Main.jack" />
+    <None Remove="TestData\Analyzer\Square\MainExpected.xml" />
+    <None Remove="TestData\Analyzer\Square\MainTExpected.xml" />
+    <None Remove="TestData\Analyzer\Square\Square.jack" />
+    <None Remove="TestData\Analyzer\Square\SquareExpected.xml" />
+    <None Remove="TestData\Analyzer\Square\SquareGame.jack" />
+    <None Remove="TestData\Analyzer\Square\SquareGameExpected.xml" />
+    <None Remove="TestData\Analyzer\Square\SquareGameTExpected.xml" />
+    <None Remove="TestData\Analyzer\Square\SquareTExpected.xml" />
     <None Remove="TestData\Max.asm" />
     <None Remove="TestData\Pong.asm" />
     <None Remove="TestData\Translator\BasicLoop.vm" />
@@ -28,6 +40,42 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="TestData\Analyzer\ArrayTest\Main.jack">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Analyzer\ArrayTest\MainExpected.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Analyzer\ArrayTest\MainTExpected.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Analyzer\Square\Main.jack">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Analyzer\Square\MainExpected.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Analyzer\Square\MainTExpected.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Analyzer\Square\Square.jack">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Analyzer\Square\SquareExpected.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Analyzer\Square\SquareGame.jack">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Analyzer\Square\SquareGameExpected.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Analyzer\Square\SquareGameTExpected.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Analyzer\Square\SquareTExpected.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\Assembler\Add.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -91,6 +139,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Project06\Assembler\Assembler.csproj" />
     <ProjectReference Include="..\Project07And08\VMTranslator\VMTranslator.csproj" />
+    <ProjectReference Include="..\Project10And11\Compiler\Compiler.csproj" />
   </ItemGroup>
 
   <ItemGroup>
