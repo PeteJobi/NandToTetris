@@ -9,7 +9,7 @@ namespace Compiler
 {
     public class Tokenizer
     {
-        public async Task<TokenList> CreateTokens(string jackPath, string outputFile)
+        public async Task<TokenList> CreateTokens(string jackPath, string? outputFile = null)
         {
             var tokens = new List<Token>();
             var builder = new StringBuilder();
@@ -81,38 +81,35 @@ namespace Compiler
                 }
             }
 
-            await WriteToFile();
+            if(outputFile != null) await WriteToFile();
             return new TokenList(tokens);
 
             void AddBuilderToTokens()
             {
                 if (builder.Length == 0) return;
                 var text = builder.ToString();
-                //AddIdentifierTokenOrNot(text, tokens);
                 if(!AddIdentifierTokenOrNot(text, tokens)) throw new InvalidOperationException($"{text} is not recognized");
                 builder.Clear();
             }
 
             async Task WriteToFile()
             {
-                using (var streamWriter = File.CreateText(outputFile))
+                await using var streamWriter = File.CreateText(outputFile);
+                await streamWriter.WriteLineAsync("<tokens>");
+                foreach (var token in tokens)
                 {
-                    await streamWriter.WriteLineAsync("<tokens>");
-                    foreach (var token in tokens)
+                    var tag = token.Type switch
                     {
-                        var tag = token.Type switch
-                        {
-                            TokenType.KEYWORD => "keyword",
-                            TokenType.SYMBOL => "symbol",
-                            TokenType.IDENTIFIER => "identifier",
-                            TokenType.INT_CONST => "integerConstant",
-                            TokenType.STRING_CONST => "stringConstant",
-                            _ => throw new ArgumentOutOfRangeException()
-                        };
-                        await streamWriter.WriteLineAsync(GetTagWithContent(tag, token.Value));
-                    }
-                    await streamWriter.WriteLineAsync("</tokens>");
+                        TokenType.KEYWORD => "keyword",
+                        TokenType.SYMBOL => "symbol",
+                        TokenType.IDENTIFIER => "identifier",
+                        TokenType.INT_CONST => "integerConstant",
+                        TokenType.STRING_CONST => "stringConstant",
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+                    await streamWriter.WriteLineAsync(GetTagWithContent(tag, token.Value));
                 }
+                await streamWriter.WriteLineAsync("</tokens>");
             }
 
             string GetTagWithContent(string tagName, string content) => 
@@ -122,8 +119,6 @@ namespace Compiler
         private TokenType? GetTokenType(string tokenValue)
         {
             if (_keywords.Contains(tokenValue)) return TokenType.KEYWORD;
-            //if (_subroutine.Contains(tokenValue)) return TokenType.SUBROUTINE;
-            //if (_types.Contains(tokenValue)) return TokenType.TYPE;
             if (tokenValue.Length == 1 && _symbols.Contains(tokenValue[0])) return TokenType.SYMBOL;
             if (short.TryParse(tokenValue, out var num) && num >= 0) return TokenType.INT_CONST;
             return null;
@@ -155,16 +150,6 @@ namespace Compiler
             "class", "field", "static", "var", "true", "false", "null", "this", "let", "do", "if", "else", "while", "return", "constructor", "function", "method", "int", "char", "boolean", "void"
         ];
 
-        //private readonly HashSet<string> _subroutine =
-        //[
-        //    "constructor", "function", "method"
-        //];
-
-        //private readonly HashSet<string> _types =
-        //[
-        //    "int", "char", "boolean", "void"
-        //];
-
         private readonly HashSet<char> _symbols =
         [
             '(', ')', '{', '}', '[', ']', '.', ',', ':', ';', '+', '-', '*', '/', '&', '|', '<', '>', '=', '~'
@@ -192,7 +177,6 @@ namespace Compiler
             public bool HasMoreTokens() => _currentIndex < list.Count - 1;
             public int GetCurrentIndex() => _currentIndex;
             public void SetCurrentIndex(int index) => _currentIndex = index;
-            //public void SetErrorMessage
         }
     }
 }

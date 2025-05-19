@@ -41,13 +41,13 @@ namespace Tests
         {
             var compiler = new JackCompiler();
 
-            await compiler.Compile(@"TestData\Analyzer\ArrayTest");
-            await CompareFiles(@"TestData\Analyzer\ArrayTest\Main.jack");
+            await compiler.Analyze(@"TestData\Compiler\Analyzer\ArrayTest");
+            await CompareFiles(@"TestData\Compiler\Analyzer\ArrayTest\Main.jack");
 
-            await compiler.Compile(@"TestData\Analyzer\Square");
-            await CompareFiles(@"TestData\Analyzer\Square\Main.jack");
-            await CompareFiles(@"TestData\Analyzer\Square\Square.jack");
-            await CompareFiles(@"TestData\Analyzer\Square\SquareGame.jack");
+            await compiler.Analyze(@"TestData\Compiler\Analyzer\Square");
+            await CompareFiles(@"TestData\Compiler\Analyzer\Square\Main.jack");
+            await CompareFiles(@"TestData\Compiler\Analyzer\Square\Square.jack");
+            await CompareFiles(@"TestData\Compiler\Analyzer\Square\SquareGame.jack");
             return;
 
             async Task CompareFiles(string jackPath)
@@ -66,6 +66,19 @@ namespace Tests
                 actual = await File.ReadAllTextAsync(analyzerOutputFile);
                 Assert.Equal(expected, actual);
             }
+        }
+
+        [Fact]
+        public async Task GeneratorTests()
+        {
+            var compiler = new JackCompiler();
+
+            await compiler.Compile(@"TestData\Compiler\Generator\Average");
+            await compiler.Compile(@"TestData\Compiler\Generator\ComplexArrays");
+            await compiler.Compile(@"TestData\Compiler\Generator\ConvertToBin");
+            await compiler.Compile(@"TestData\Compiler\Generator\Pong");
+            await compiler.Compile(@"TestData\Compiler\Generator\Seven");
+            await compiler.Compile(@"TestData\Compiler\Generator\Square");
         }
     }
 }
