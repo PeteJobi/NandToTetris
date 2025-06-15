@@ -1,0 +1,172 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Screen.jack
+/**
+ * A library of functions for displaying graphics on the screen.
+ * The Hack physical screen consists of 512 rows (indexed 0..511, top to bottom)
+ * of 256 pixels each (indexed 0..255, left to right). The top left pixel on 
+ * the screen is indexed (0,0).
+ */
+class Screen {
+    static int color;
+    static int screenBase;
+
+    /** Initializes the Screen. */
+    function void init() {
+        let screenBase = 16384;
+        let color = 1;
+        return;
+    }
+
+    /** Erases the entire screen. */
+    function void clearScreen() {
+        var int i, end;
+        let end = 32 * 256;
+        while(i < end){
+            do Memory.poke(screenBase + i, 0);
+            let i = i + 1;
+        }
+        return;
+    }
+
+    /** Sets the current color, to be used for all subsequent drawXXX commands.
+     *  Black is represented by true, white by false. */
+    function void setColor(boolean b) {
+        if(b){ let color = 1; }
+        else { let color = 0; }
+        return;
+    }
+
+    /** Draws the (x,y) pixel, using the current color. */
+    function void drawPixel(int x, int y) {
+        var int d, r, pixelAddr, p;
+        let d = x / 16;
+        let r = x - (d * 16);
+        let pixelAddr = screenBase + (y * 32) + d;
+        let p = 1;
+        while(r > 0){
+            let p = p * 2;
+            let r = r - 1;
+        }
+        if(color = 1){ do Memory.poke(pixelAddr, Memory.peek(pixelAddr) | p); }
+        else { do Memory.poke(pixelAddr, Memory.peek(pixelAddr) & ~p); }
+        return;
+    }
+
+    /** Draws a line from pixel (x1,y1) to pixel (x2,y2), using the current color. */
+    function void drawLine(int x1, int y1, int x2, int y2) {
+        var int dx, dy, dxAbs, dyAbs, a, b, aDiff, bDiff, diff;
+        let dx = x2 - x1;
+        let dy = y2 - y1;
+        let dxAbs = Math.abs(dx);
+        let dyAbs = Math.abs(dy);
+
+        if(dx < 0){ let aDiff = -1; }
+        else { let aDiff = 1; }
+        if(dy < 0){ let bDiff = -1; }
+        else { let bDiff = 1; }
+        
+        if(dx = 0){
+            while(~(Math.abs(b) > dyAbs)){
+                do Screen.drawPixel(x1, y1 + b);
+                let b = b + bDiff;
+            }
+        } else{
+            if(dy = 0){
+                do Screen.drawHorizontalLine(x1, x2, y1);
+            }else{
+                while (~(Math.abs(a) > dxAbs) & ~(Math.abs(b) > dyAbs)){
+                    do Screen.drawPixel(x1 + a, y1 + b);
+                    if(diff < 0){
+                        let a = a + aDiff;
+                        let diff = diff + dyAbs;
+                    }else{
+                        let b = b + bDiff;
+                        let diff = diff - dxAbs;
+                    }
+                }
+            }
+        }
+
+        return;
+    }
+
+    function void drawHorizontalLine(int x1, int x2, int y){
+        var int d, r, x1PixelAddr, x2PixelAddr, p, pr;
+        if(x2 < x1){//swap x1 and x2
+            let x2 = x2 + x1;
+            let x1 = x2 - x1;
+            let x2 = x2 - x1;
+        }
+        let d = x1 / 16;
+        let r = x1 - (d * 16);
+        let x1PixelAddr = screenBase + (y * 32) + d;
+        let p = 1;
+        while(r > 0){
+            let p = p * 2;
+            let r = r - 1;
+        }
+        let pr = p - 1;
+
+        let d = x2 / 16;
+        let r = x2 - (d * 16);
+        let x2PixelAddr = screenBase + (y * 32) + d;
+        let p = 1;
+        while(r > 0){
+            let p = p * 2;
+            let r = r - 1;
+        }
+        let p = (p * 2) - 1;
+
+        if(x1PixelAddr = x2PixelAddr){
+            let p = pr | ~p;
+            if(color = 1){ do Memory.poke(x1PixelAddr, Memory.peek(x1PixelAddr) | ~p); }
+            else { do Memory.poke(x1PixelAddr, Memory.peek(x1PixelAddr) & p); }
+            return;
+        }
+
+        if(color = 1){ do Memory.poke(x1PixelAddr, Memory.peek(x1PixelAddr) | ~pr); }
+        else { do Memory.poke(x1PixelAddr, Memory.peek(x1PixelAddr) & pr); }
+        
+        while(x1PixelAddr < (x2PixelAddr - 1)){
+            let x1PixelAddr = x1PixelAddr + 1;
+            if(color = 1) { do Memory.poke(x1PixelAddr, -1); }
+            else { do Memory.poke(x1PixelAddr, 0); }
+        }
+
+        if(color = 1){ do Memory.poke(x2PixelAddr, Memory.peek(x2PixelAddr) | p); }
+        else { do Memory.poke(x2PixelAddr, Memory.peek(x2PixelAddr) & ~p); }
+        return;
+    }
+
+    /** Draws a filled rectangle whose top left corner is (x1, y1)
+     *  and bottom right corner is (x2,y2), using the current color. */
+    function void drawRectangle(int x1, int y1, int x2, int y2) {
+        var int i, dy;
+        let dy = y2 - y1;
+        while(i < dy){
+            do Screen.drawLine(x1, y1 + i, x2, y1 + i);
+            let i = i + 1;
+        }
+        return;
+    }
+
+    /** Draws a filled circle of radius r<=181 around (x,y), using the current color. */
+    function void drawCircle(int x, int y, int r) {
+        var int i, si, rSquare, hypo;
+        let rSquare = r * r;
+        while(i < r){
+            let i = i + 1;
+            let hypo = Math.sqrt(rSquare - (i * i));
+            do Screen.drawLine(x - hypo, y - i, x + hypo, y - i);
+        }
+        do Screen.drawLine(x - r, y, x + r, y);
+        while(i > 0){
+            let hypo = Math.sqrt(rSquare - (i * i));
+            do Screen.drawLine(x - hypo, i + y, x + hypo, i + y);
+            let i = i - 1;
+        }
+        return;
+    }
+}
